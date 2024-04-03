@@ -1,0 +1,21 @@
+.searchbar{
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+    text-align: center;
+}
+
+.form-content{
+    width:400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-width: 2px;
+    border-color: #3B71CA
+}

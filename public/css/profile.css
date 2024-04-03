@@ -1,0 +1,19 @@
+.profile-container{
+    max-width: 1024px;
+    max-height: 600px;
+}
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+    font-size: 1rem;
+    line-height: 2.15;
+    padding-left: .75em;
+    padding-right: .75em;
+    }
+    /* .card-registration .select-arrow {
+    top: 13px;
+    } */
+
+.form-control:focus {
+    box-shadow: none;
+    border-width: 2px;
+    border-color: #3B71CA
+}

@@ -1,0 +1,40 @@
+ .nav-link{
+    font-size: 16px;
+    color: #000000;
+    opacity: 0.85;
+    font-weight: 500;
+    margin-right: 40px;
+    position: relative;
+}
+
+.nav-item>a:hover {
+    color: #150365;
+    font-weight: 600;
+    opacity: 1;
+}
+
+.active {
+    color: rgb(31, 25, 112) !important;
+    font-weight: 700;
+}
+
+.dropdown_active{
+    background: #bed4ff;
+}
+
+
+/* .nav-link::after{
+    content: '';
+    opacity: 0;
+    transition: all 0.2s;
+    height: 2px;
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.nav-link:hover::after{
+    opacity: 1;
+} */

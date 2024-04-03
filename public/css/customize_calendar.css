@@ -1,0 +1,63 @@
+.cal-container{
+    margin-top: 35px;
+    position: relative;
+    width: 400px;
+    height: 420px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.cal-container #dycalendar{
+    width: 100%;
+    padding: 15px;
+    /* margin: 15px; */
+}
+
+#dycalendar table{
+    width: 100%;
+    margin-top: 40px;
+}
+
+#dycalendar table td{
+    font-weight: 500;
+    color: #444;
+    padding: 10px;
+}
+
+#dycalendar table tr{
+    font-weight: 500;
+    color: #120aee;
+    font-size: 16px;
+}
+
+#dycalendar .dycalendar-header{
+    font-weight: 600;
+    font-size: 18px;
+    color: #273bee;
+}
+
+#dycalendar .dycalendar-prev-next-btn.prev-btn,
+#dycalendar .dycalendar-prev-next-btn.next-btn{
+    font-weight: 700;
+    font-size: 18px;
+
+}
+
+#dycalendar .dycalendar-today-date{
+    /* color: #ffffff; */
+    border: 2px solid #273bee;
+    border-radius: 50%;
+    width: 30px;
+}
+
+
+#dycalendar .dycalendar-week-letters td{
+    font-weight: 700;
+    color: rgb(248, 5, 5);
+    font-size: 16px;
+}
