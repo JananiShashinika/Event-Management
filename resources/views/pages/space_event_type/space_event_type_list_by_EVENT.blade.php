@@ -20,7 +20,7 @@
     <!-- Body Content -->
     <div style="text-align: center; font-size: 1.2em;">
 
-        <h2>Space Application - List of Event Activities</h2>
+        <h2 style="font-family: 'Times New Roman', Times, serif;text-align: center">Space Application - List of Event Activities</h2>
 
         <table style="width: 60%; margin: 0 auto; border-collapse: collapse;">
             <thead>

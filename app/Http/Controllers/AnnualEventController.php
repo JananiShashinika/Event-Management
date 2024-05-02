@@ -55,10 +55,19 @@ class AnnualEventController extends Controller
             ->select('event_name', 'id', 'event_id')
             ->get();
 
+        // $subtasks = SubTask::where('emp_assign','id', $request->emp_assign)
+        //     ->select('emp_assign')
+        //     ->get();
+        $docs = Task::where('event_type_id', $request->event_id)
+            ->select('attachment')
+            ->get();
+
         // Return view with event data
         return view('pages.space_event_type.eventReportView', [
             'eventname' => $eventname,
             'eventType' => $eventType,
+            // 'subtasks'=>$subtasks,
+            'docs' => $docs,
         ]);
     }
 
@@ -128,6 +137,19 @@ class AnnualEventController extends Controller
         }
     }
 
+    // Method to fetch and return employees data
+    public function getEmployees(Request $request)
+    {
+        // Retrieve employees from the database
+        $employees = SubTask::where('new_event_id', $request->new_event_id)
+        ->pluck('emp_assign');
+        // ->select('emp_assign')
+        // ->get();
+
+
+        // Return the employees data as JSON response
+        return response()->json(['employees' => $employees]);
+    }
 
     // public function assignemployee(Request $request, $event_id, $event_name)
     // {

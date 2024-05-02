@@ -34,11 +34,14 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Tasks') }}</div>
+                {{--  <div class="card-header">{{ __('Tasks') }}</div>  --}}
 
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
+                    <h3>Activity created successfully</h3>
+                    {{--  <div class="table-responsive">  --}}
+
+
+                        {{--  <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Task</th>
@@ -46,15 +49,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{--  @foreach($tasks as $task)
+
+                                // Commented
+                                 @foreach($tasks as $task)
                                     <tr>
                                         <td>{{ $task->task_name }}</td>
                                         <td contenteditable="true">{{ $task->status }}</td>
                                     </tr>
-                                @endforeach  --}}
+                                @endforeach
                             </tbody>
-                        </table>
-                    </div>
+                        </table>  --}}
+                    {{--  </div>  --}}
                 </div>
             </div>
         </div>

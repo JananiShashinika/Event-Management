@@ -11,7 +11,8 @@
     {{--styles--}}
     @include('libraries.styles')
 </head>
-<body style="background-color: #e5e7f6">
+{{--  <body style="background-color: #e5e7f6">  --}}
+   <body style="background-image: url('{{ asset('images/background.jpg') }}');">
     {{--page nav bar--}}
     @include('components.nav')
     {{--content of page--}}

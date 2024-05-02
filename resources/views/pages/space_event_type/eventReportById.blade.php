@@ -18,7 +18,7 @@
     <div style="font-family: 'Times New Roman', Times, serif; align-content: center">
         <div>
             @foreach ($eventData as $event)
-                <h3 style="text-align: center">{{ $event['event_name'] }}</h3>
+                <h3 style="text-align: center; color:darkblue; font-weight: bold;">{{ $event['event_name'] }}</h3>
             @endforeach
 
             <h4 style="font-weight: bold; text-decoration: underline;">Event Organizing Details</h4>
@@ -37,10 +37,11 @@
             <table style="width: 100%;">
                 <thead>
                     <tr>
-                        <th style="width: 40%;">Task</th>
+                        <th style="width: 30%;">Task</th>
                         <th></th>
-                        <th style="width: 20%;">Employee</th>
-                        <th style="text-align: right" style="width: 20%;">Action</th> <!-- Added for button -->
+                        <th style="width: 30%;">Employee</th>
+                        <th style="width: 20%;">Assign</th>
+                        <th style="width: 20%;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +58,7 @@
                             </td>
 
                             <td>
-                                <select style="width: 100%;" name="employee_id"> <!-- Updated name attribute -->
+                                <select style="width: 60%;" name="employee_id"> <!-- Updated name attribute -->
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->emp_id }}">{{ $employee->emp_name }}</option>
                                     @endforeach
@@ -65,8 +66,13 @@
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-primary mt-3 float-end add-task">Add</button>
+                                <button type="button" class="btn btn-dark mt-2  add-task">Assign</button>
                             </td>
+
+                            <td>
+                                <button type="button" class="btn btn-warning mt-2 status" >Done</button>
+                            </td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -76,7 +82,45 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+
         $(document).ready(function() {
+
+            // Function to update dropdown options
+    function updateDropdownOptions() {
+        $.ajax({
+            url: '{{ route('get.employees') }}', // Endpoint to fetch updated employee data
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                // Clear existing options in the dropdown
+                $('select[name=employee_id]').empty();
+
+                // Append new options to the dropdown
+                $.each(response.employees, function(index, employee) {
+                    $('select[name=employee_id]').append('<option value="' + employee.emp_id + '">' + employee.emp_name + '</option>');
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert("An error occurred while fetching employee data.");
+            }
+        });
+    }
+
+    // Retrieve the selected option from local storage
+    var selectedEmployee = localStorage.getItem('selectedEmployee');
+    // Set the dropdown's selected option if a value is found in local storage
+    if(selectedEmployee){
+        $('select[name=employee_id]').val(selectedEmployee);
+    }
+
+    // Add change event listener to the dropdown
+    $('select[name=employee_id]').change(function(){
+        //Store selected employee to the local storage
+        localStorage.setItem('selectedEmployee',$(this).val());
+    });
+
             // Add task AJAX request
             $(".add-task").click(function() {
                 var taskRow = $(this).closest("tr");

@@ -51,11 +51,11 @@ Route::get('/space_events/{event_id}',[AnnualEventController::class,'show'])->na
 // View Created event report
 Route::get('/space_events/{eventTypeId}/Report', [AnnualEventController::class, 'Report'])->name('space_event.editReport');
 
-
 //Route::get('/space_events/{space_event}/edit',[AnnualEventController::class,'edit'])->name('space_event.edit');
 Route::put('/space_events/{space_event}/update',[AnnualEventController::class,'update'])->name('space_event.update');
 Route::delete('/space_events/{employee}/delete',[AnnualEventController::class,'delete'])->name('space_event.delete');
 
+Route::get('/space_events/get_employees', [AnnualEventController::class, 'getEmployees'])->name('get.employees');
 
 
 //Space Event Type List

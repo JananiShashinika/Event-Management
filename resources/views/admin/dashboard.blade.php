@@ -1,16 +1,67 @@
 @extends('layouts.app')
 
+{{--  <style>
+    .container {
+        background-color: #f0f0f0; /* Set your desired background color */
+    }
+
+    .card {
+        background-color: #ffffff; /* Set your desired background color */
+    }
+</style>  --}}
+
 @section('title')
     Dashboard
 @endsection
 
 @section('content')
 
+<style>
+    .container {
+        padding: 10px;
+    }
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        background-image: url('{{ asset('images/ligghtblue.jpg') }}');
+        background-size: cover;
+    }
+    .card {
+        background-color: #f0f969;
+
+    }
+    .upcoming-events-label {
+        font-family: 'Times New Roman', Times, serif;
+        color: #f60606; /* Set your desired font color */
+        text-align: center;
+        padding: 5px;
+
+    }
+    {{--  .carousel-inner .carousel-item img {
+        width: 100%;
+        height: 100%;
+    }  --}}
+    .font-style{
+        font-family: 'Times New Roman', Times, serif;
+    }
+    .equal-size {
+        height: 220px;
+
+    }
+
+</style>
+<div style="background-image: url('{{ asset('images/ligghtblue.jpg') }}');">
+
     <div class="container">
         <div class="row">
-            <div class="col-9">
-                <div class="container mt-4 mb-">
-                    <label class="h5">Upcoming Events</label>
+            <h1  class = "font-style" style="text-align: center; padding: 20px; color:midnightblue;"> Event Management System of The Space Applications Division</h1>
+            <div class="col-5">
+                <div class="container mt-6">
+                    <p class = "font-style h5">The system treamlining event organization effortlessly.
+                        Upcoming events and associated tasks are presented with ease, facilitating coordination.
+                       <br> Employees are assigned tasks seamlessly, actions logged for monitoring. Productivity and collaboration are enhanced.
+                         Welcome to a smoother event management experience.</p>
+
+                         <label class="h3 upcoming-events-label">Upcoming Events</label>
                 </div>
                 {{-- <form action="{{url('search')}}" method="get" role="search" class="searchbar">
                     <div class="input-group form-content">
@@ -22,16 +73,16 @@
 
                 {{--upcoming events table--}}
                 <div class="container" id="upcoming_tbl">
-                    <div id="card" class="card border-0 shadow-lg" style="width: 100%;">
+                    <div id="card" class="card border-1 shadow-lg background-y b" style="width: 100%;">
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Event Name</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Coordinator Name</th>
-                                    <th>Activity ID</th>
+                                    <th>Activity</th>
+                                    <th>Starting Date</th>
+                                    {{--  <th>End Date</th>  --}}
+                                    {{--  <th>Coordinator Name</th>
+                                    <th>Activity ID</th>  --}}
                                     <th> </th>
                                 </tr>
                             </thead>
@@ -41,9 +92,9 @@
                                         <tr>
                                             <td>{{ $upcomingEvent->event_name }}</td>
                                             <td>{{ $upcomingEvent->start_date }}</td>
-                                            <td>{{ $upcomingEvent->end_date }}</td>
-                                            <td>{{ $upcomingEvent->coordinator_id }}</td>
-                                            <td>{{ $upcomingEvent->event__id }}</td>
+                                            {{--  <td>{{ $upcomingEvent->end_date }}</td>  --}}
+                                            {{--  <td>{{ $upcomingEvent->coordinator_id }}</td>  --}}
+                                            {{--  <td>{{ $upcomingEvent->event__id }}</td>  --}}
                                             {{--  <td><a href="{{ route('upcoming_event.view', $upcomingEvent->id) }}" class="btn btn-primary">View</a></td>  --}}
                                             <td><a href="{{ route('space_event.index1') }}">View</td>
                                         </tr>
@@ -51,7 +102,7 @@
 
                                 @else
                                     <tr>
-                                        <td colspan="6">Record Not Found</td>
+                                        <td colspan="3">Record Not Found</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -59,9 +110,13 @@
                         </div>
                     </div>
                 </div>
+<div class="align-content-center">
 
+    {{--  <x-calendar/>  --}}
+
+</div>
             </div>
-            <div class="col-3 mt-5">
+
                 {{-- Add Searchbar Component --}}
 {{--                <form action="{{url('search')}}" method="get" role="search" class="searchbar">--}}
 {{--                    <div class="input-group form-content">--}}
@@ -72,12 +127,40 @@
 {{--                    </div>--}}
 {{--                </form>--}}
                 {{-- Add Calendar Components --}}
-                <x-calendar/>
+                {{--  <x-calendar/>  --}}
+
+                <div class="col-7 mt-6"> <!-- Set padding to 0 -->
+                    <!-- Add your home image or carousel component here -->
+                    <!-- Example: -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/image1.jpeg') }}" class="img-fluid equal-size" alt="Image 1">
+                            </div>
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/image2.jpg') }}" class="img-fluid equal-size" alt="Image 2">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/image3.jpg') }}" class="img-fluid equal-size" alt="Image 3">
+                            </div>
+                            <div class="col-md-6">
+                                <img src="{{ asset('images/image6.jpg') }}" class="img-fluid equal-size" alt="Image 4">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
         </div>
-    </div>
 
+
+            </div>
+
+    </div>
+</div>
 @endsection
 
 {{--styles for only dashboard page--}}

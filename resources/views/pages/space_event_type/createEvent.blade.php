@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h1 style="text-align: center;">Create New Activity</h1>
+    <h1 style="font-family: 'Times New Roman', Times, serif; text-align: center;">Create New Activity</h1>
 
     <!-- Your form HTML code goes here -->
     <form id="createEventForm" style="width: 50%; margin: 0 auto; border-collapse: collapse;"
