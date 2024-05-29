@@ -10,7 +10,12 @@
             border: none !important;
             background: transparent !important;
         }
+        .status.Done {
+            background-color: #4CAF50; /* Green for "done" state */
+        }
+
     </style>
+
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Include CSRF token -->
 </head>
 
@@ -37,11 +42,13 @@
             <table style="width: 100%;">
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Task</th>
+                        <th style="width: 20%;">Task</th>
                         <th></th>
-                        <th style="width: 30%;">Employee</th>
-                        <th style="width: 20%;">Assign</th>
-                        <th style="width: 20%;">Status</th>
+                        <th style="width: 25cm;">Employee</th>
+                        {{--  <th style="width: 20%;">Assign Employee</th>  --}}
+                        <th style="width: 30%;">Assigned</th>
+                        <th style="width: 25%;">Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -58,19 +65,26 @@
                             </td>
 
                             <td>
-                                <select style="width: 60%;" name="employee_id"> <!-- Updated name attribute -->
+                                <select style="width: 60%;" name="employee_id">
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->emp_id }}">{{ $employee->emp_name }}</option>
                                     @endforeach
                                 </select>
-                            </td>
+                            {{--  </td>
 
-                            <td>
+                            <td>  --}}
                                 <button type="button" class="btn btn-dark mt-2  add-task">Assign</button>
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-warning mt-2 status" >Done</button>
+                                <span class="employee_assigned" name="employee_assigned" >
+                                    {{ $task->emp_name}}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{--  <button type="button" id="statusButton{{ $task->id }}" class="btn btn-warning mt-2 status">{{ $task->status ?? 'Todo' }}</button>  --}}
+                                <button type="button" class="btn btn-warning status-button" data-task-id="{{ $task->id }}">{{ $task->status == 1 ? 'Done' : 'To do' }}</button>
                             </td>
 
                         </tr>
@@ -84,42 +98,7 @@
     <script>
 
 
-        $(document).ready(function() {
-
-            // Function to update dropdown options
-    function updateDropdownOptions() {
-        $.ajax({
-            url: '{{ route('get.employees') }}', // Endpoint to fetch updated employee data
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                // Clear existing options in the dropdown
-                $('select[name=employee_id]').empty();
-
-                // Append new options to the dropdown
-                $.each(response.employees, function(index, employee) {
-                    $('select[name=employee_id]').append('<option value="' + employee.emp_id + '">' + employee.emp_name + '</option>');
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-                alert("An error occurred while fetching employee data.");
-            }
-        });
-    }
-
-    // Retrieve the selected option from local storage
-    var selectedEmployee = localStorage.getItem('selectedEmployee');
-    // Set the dropdown's selected option if a value is found in local storage
-    if(selectedEmployee){
-        $('select[name=employee_id]').val(selectedEmployee);
-    }
-
-    // Add change event listener to the dropdown
-    $('select[name=employee_id]').change(function(){
-        //Store selected employee to the local storage
-        localStorage.setItem('selectedEmployee',$(this).val());
-    });
+    $(document).ready(function() {
 
             // Add task AJAX request
             $(".add-task").click(function() {
@@ -154,6 +133,35 @@
                 });
             });
         });
+
+        // Update task status
+        $('.status-button').click(function() {
+            const button = $(this);
+            const taskId = button.data('task_id');
+
+            $.ajax({
+                url: '{{ route('update.task.status') }}',
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    task_id: taskId,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        button.text('Done');
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('An error occurred. Please try again.');
+                }
+
+            });
+          });
+
+
     </script>
 </body>
 

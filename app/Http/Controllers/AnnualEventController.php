@@ -9,6 +9,7 @@ use App\Models\NewEvent;
 use App\Models\SubTask;
 use App\Models\Task;
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -81,23 +82,32 @@ class AnnualEventController extends Controller
             ->select('*')
             ->get();
 
-        //$employee = Employee::where('emp_id',$request->coordinator)->get();
+        $employees = Employee::select('*')->get();
 
-        // $tasks = Task::where('event_type_id', $eventID2)
+        //$employee = Employee::where('emp_id',$request->coordinator)->get();
+        // $tasks = Task::where('xamppevent_type_id', $eventID2)
         //     ->select('task_name', 'event_type_id')
         //     ->get();
 
         $tasks = SubTask::where('new_event_id', $eventId)
-            ->select('tasks','emp_assign')
+            ->select('tasks','emp_assign','status')
             ->get();
 
-        $employees = Employee::select('*')->get();
+        $assign_employee = SubTask::where('id', $request->id)
+        ->select('emp_assign')->get();
+
+        // Join the SubTask and Employee tables to get the employee name
+        $tasks = SubTask::leftJoin('employees', 'sub_tasks.emp_assign', '=', 'employees.emp_id')
+        ->where('new_event_id', $eventId)
+        ->select('sub_tasks.tasks', 'sub_tasks.emp_assign', 'sub_tasks.status', 'employees.emp_name')
+        ->get();
+
 
         // Return JSON response with rendered view and event data
         return response()->json([
             'html' => view(
                 'pages.space_event_type.eventReportById',
-                compact('eventData', 'tasks', 'employees') // Make sure to include $tasks if needed
+                compact('eventData', 'tasks', 'employees','assign_employee')
             )->render(),
         ]);
     }
@@ -116,6 +126,7 @@ class AnnualEventController extends Controller
         $event_name = $request->input('event_name');
         $employee_id = $request->input('employee_id');
 
+
         // Update the emp_assign column for the corresponding subtask
         $subtask = SubTask::where('new_event_id', $new_event_id)
             ->where('tasks', $event_name)
@@ -123,10 +134,14 @@ class AnnualEventController extends Controller
 
         // Check if any rows were affected by the update operation
         if ($subtask > 0) {
-            // Respond with a success message
+            // Retrieve the employee's name
+            $employee = Employee::find($employee_id);
+
+            // Respond with a success message and employee's name
             return response()->json([
                 'success' => true,
                 'message' => 'Employee assigned successfully.',
+                'employee_name' => $employee->emp_name
             ]);
         } else {
             // Respond with an error message if no rows were affected
@@ -136,6 +151,7 @@ class AnnualEventController extends Controller
             ]);
         }
     }
+
 
     // Method to fetch and return employees data
     public function getEmployees(Request $request)
@@ -150,6 +166,36 @@ class AnnualEventController extends Controller
         // Return the employees data as JSON response
         return response()->json(['employees' => $employees]);
     }
+
+    public function status(Request $request)
+{
+    $taskId = $request->input('id');
+
+    try {
+        $task = SubTask::findOrFail($taskId); // Ensure you are using the correct model
+
+        $task->status = $task->status == 1 ? 0 : 1; // Toggle status
+        $task->save();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    } catch (ModelNotFoundException $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Task not found.'
+        ], 404);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred. Please try again.'
+        ], 500);
+    }
+}
+
+
+
+
 
     // public function assignemployee(Request $request, $event_id, $event_name)
     // {
@@ -204,6 +250,7 @@ class AnnualEventController extends Controller
 
         // return view('pages.space_event.space_event_list',
         // edited parts are included in the new file. (space_event_list.blade.php -> space_event_list_new.blade.php)
+
         return view('pages.space_event.space_event_list_new', [
             'spnew_event' => $annual_events,
             'event_types' => $event_types,

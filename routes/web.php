@@ -57,6 +57,7 @@ Route::delete('/space_events/{employee}/delete',[AnnualEventController::class,'d
 
 Route::get('/space_events/get_employees', [AnnualEventController::class, 'getEmployees'])->name('get.employees');
 
+Route::post('/space_events/status',[AnnualEventController::class, 'status'])->name('update.task.status');
 
 //Space Event Type List
 Route::prefix('event_type')->group(function (){
