@@ -10,10 +10,16 @@
             border: none !important;
             background: transparent !important;
         }
-        .status.Done {
-            background-color: #4CAF50; /* Green for "done" state */
+
+        .btn-warning {
+            background-color: yellow;
+            color: black;
         }
 
+        .btn-success {
+            background-color: green;
+            color: white;
+        }
     </style>
 
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- Include CSRF token -->
@@ -38,30 +44,26 @@
         </div>
 
         <div>
-            <h4 style="font-weight: bold; text-decoration: underline; ">Task List</h4>
+            <h4 style="font-weight: bold; text-decoration: underline;">Task List</h4>
             <table style="width: 100%;">
                 <thead>
                     <tr>
                         <th style="width: 20%;">Task</th>
                         <th></th>
                         <th style="width: 25cm;">Employee</th>
-                        {{--  <th style="width: 20%;">Assign Employee</th>  --}}
                         <th style="width: 30%;">Assigned</th>
                         <th style="width: 25%;">Status</th>
-
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($tasks as $task)
                         <tr>
                             <td>
-                                <input class="taskname" name="taskname" type="text" value="{{ $task->tasks }}"
-                                    readonly>
+                                <input class="taskname" name="taskname" type="text" value="{{ $task->tasks }}" readonly>
                             </td>
 
                             <td>
-                                <input class="neweventid" name="neweventid" type="hidden" value="{{ $event['id'] }}"
-                                    readonly>
+                                <input class="neweventid" name="neweventid" type="hidden" value="{{ $event['id'] }}" readonly>
                             </td>
 
                             <td>
@@ -70,23 +72,20 @@
                                         <option value="{{ $employee->emp_id }}">{{ $employee->emp_name }}</option>
                                     @endforeach
                                 </select>
-                            {{--  </td>
-
-                            <td>  --}}
-                                <button type="button" class="btn btn-dark mt-2  add-task">Assign</button>
+                                <button type="button" class="btn btn-dark mt-2 add-task">Assign</button>
                             </td>
 
                             <td>
-                                <span class="employee_assigned" name="employee_assigned" >
-                                    {{ $task->emp_name}}
+                                <span class="employee_assigned" name="employee_assigned">
+                                    {{ $task->emp_assign ? $employees->firstWhere('emp_id', $task->emp_assign)->emp_name : 'Not Assigned' }}
                                 </span>
                             </td>
 
                             <td>
-                                {{--  <button type="button" id="statusButton{{ $task->id }}" class="btn btn-warning mt-2 status">{{ $task->status ?? 'Todo' }}</button>  --}}
-                                <button type="button" class="btn btn-warning status-button" data-task-id="{{ $task->id }}">{{ $task->status == 1 ? 'Done' : 'To do' }}</button>
+                                <button type="button" class="btn status-button {{ $task->status == 1 ? 'btn-success' : 'btn-warning' }}" data-task-id="{{ $task->id }}">
+                                    {{ $task->status == 1 ? 'Done' : 'To do' }}
+                                </button>
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -96,16 +95,13 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
-
-    $(document).ready(function() {
-
+        $(document).ready(function() {
             // Add task AJAX request
             $(".add-task").click(function() {
                 var taskRow = $(this).closest("tr");
                 var taskName = taskRow.find(".taskname").val();
                 var neweventid = taskRow.find(".neweventid").val();
-                var selectedEmployee = taskRow.find("select[name=employee_id]").val(); // Updated selector
+                var selectedEmployee = taskRow.find("select[name=employee_id]").val();
 
                 $.ajax({
                     url: '{{ route('assign.employee') }}',
@@ -121,7 +117,7 @@
                         console.log(response);
                         if (response.success) {
                             alert("Employee assigned successfully.");
-
+                            taskRow.find('.employee_assigned').text(response.employee_name); // Update the assigned employee name
                         } else {
                             alert("Error: " + response.message);
                         }
@@ -132,36 +128,40 @@
                     }
                 });
             });
-        });
 
-        // Update task status
-        $('.status-button').click(function() {
-            const button = $(this);
-            const taskId = button.data('task_id');
+                // Update task status
+                $('.status-button').click(function() {
+                    const button = $(this);
+                    const taskId = button.data('task-id'); // Get the task ID from the data attribute
+                  
+                    $.ajax({
+                        url: '{{ route('update.task.status') }}',
+                        method: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content'),
+                            task_id: taskId, // Pass the task ID
 
-            $.ajax({
-                url: '{{ route('update.task.status') }}',
-                method: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    task_id: taskId,
-                },
-                success: function(response) {
-                    if (response.success) {
-                        button.text('Done');
-                    } else {
-                        alert('An error occurred. Please try again.');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    alert('An error occurred. Please try again.');
-                }
-
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                if (button.text() === 'To do') {
+                                    button.text('Done');
+                                    button.removeClass('btn-warning').addClass('btn-success'); // Change button color to green
+                                } else {
+                                    button.text('To do');
+                                    button.removeClass('btn-success').addClass('btn-warning'); // Change button color to yellow
+                                }
+                            } else {
+                                alert('An error occurred. Please try again.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                });
             });
-          });
-
-
     </script>
 </body>
 

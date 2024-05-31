@@ -90,7 +90,7 @@ class AnnualEventController extends Controller
         //     ->get();
 
         $tasks = SubTask::where('new_event_id', $eventId)
-            ->select('tasks','emp_assign','status')
+            ->select('tasks','emp_assign','status','id')
             ->get();
 
         $assign_employee = SubTask::where('id', $request->id)
@@ -168,30 +168,22 @@ class AnnualEventController extends Controller
     }
 
     public function status(Request $request)
-{
-    $taskId = $request->input('id');
+    {
+        $request->validate([
+            'task_id' => 'required|integer|exists:sub_tasks,id',
+        ]);
 
-    try {
-        $task = SubTask::findOrFail($taskId); // Ensure you are using the correct model
-
+        $task = SubTask::find($request->input('task_id'));
         $task->status = $task->status == 1 ? 0 : 1; // Toggle status
         $task->save();
 
         return response()->json([
             'success' => true,
+            'message' => 'Task status updated successfully.',
         ]);
-    } catch (ModelNotFoundException $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Task not found.'
-        ], 404);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'An error occurred. Please try again.'
-        ], 500);
     }
-}
+
+
 
 
 

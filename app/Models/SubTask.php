@@ -17,6 +17,7 @@ class SubTask extends Model
         'tasks',
         'emp_assign',
         'status'
-
     ];
+
+
 }
