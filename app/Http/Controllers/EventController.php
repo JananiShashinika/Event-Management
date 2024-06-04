@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class EventController extends Controller
 {
- // Assuming you have a Student model
+
 
  protected $fillable = ['name', 'school', 'contact', 'email'];
 
@@ -35,7 +35,7 @@ public function store(Request $request)
 
 public function showRegisteredList()
 {
-    $students = Student::latest()->get(); // Retrieve all students, assuming you have a Student model
+    $students = Student::latest()->get(); 
 
 
     return view('pages.reports.registeredlist', compact('students'));

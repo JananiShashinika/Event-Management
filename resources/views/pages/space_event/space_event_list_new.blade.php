@@ -124,23 +124,6 @@
                                     </div>
                                 </div>
 
-                                {{--  <div class="mb-3">
-                                    <label for="eventName" class="form-label">Event Name</label>
-                                    <input type="text" name="eventName" id="eventName" class="form-control"
-                                           placeholder="Enter Event Name" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>  --}}
-
-                                {{--  <div class="mb-3">
-                                    <label for="eventName" class="form-label">Event Name</label>
-                                    <input type="text" name="eventName" id="eventName" class="form-control"
-                                           placeholder="Enter Event Name" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>  --}}
 
                                 <div class="mb-3">
                                     <label for="event_type" class="form-label form-input">Select Event Type</label>
