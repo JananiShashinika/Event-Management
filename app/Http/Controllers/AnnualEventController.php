@@ -84,10 +84,6 @@ class AnnualEventController extends Controller
 
         $employees = Employee::select('*')->get();
 
-        //$employee = Employee::where('emp_id',$request->coordinator)->get();
-        // $tasks = Task::where('xamppevent_type_id', $eventID2)
-        //     ->select('task_name', 'event_type_id')
-        //     ->get();
 
         $tasks = SubTask::where('new_event_id', $eventId)
             ->select('tasks','emp_assign','status','id')
@@ -159,8 +155,6 @@ class AnnualEventController extends Controller
         // Retrieve employees from the database
         $employees = SubTask::where('new_event_id', $request->new_event_id)
         ->pluck('emp_assign');
-        // ->select('emp_assign')
-        // ->get();
 
 
         // Return the employees data as JSON response
@@ -174,7 +168,7 @@ class AnnualEventController extends Controller
         ]);
 
         $task = SubTask::find($request->input('task_id'));
-        $task->status = $task->status == 1 ? 0 : 1; // Toggle status
+        $task->status = $task->status == 1 ? 0 : 1;
         $task->save();
 
         return response()->json([
@@ -184,43 +178,6 @@ class AnnualEventController extends Controller
     }
 
 
-
-
-
-
-
-    // public function assignemployee(Request $request, $event_id, $event_name)
-    // {
-    //     $employee_ids = $request->input('employees');
-
-    //    // Retrieve all subtasks for the given event and task
-    // $subtasks = SubTask::where('new_event_id', $event_id)
-    // ->where('tasks', $event_name)
-    // ->get();
-
-    // foreach ($subtasks as $index => $subtask) {
-    //     // Check if an employee ID is available for the current task
-    //     if (isset($employee_ids[$index])) {
-    //         $employee_id = $employee_ids[$index];
-    //         // Update emp_assign for the current subtask
-    //         $subtask->update(['emp_assign' => $employee_id]);
-    //     } else {
-    //         // Handle case where no employee is selected for the current task
-    //         // You may want to implement error handling or provide a default behavior
-    //     }
-    // }
-    // Respond with a success message
-    //     return response()->json(['message' => 'Employees assigned successfully.']);
-    // }
-
-    //correct one
-    // $eventname = NewEvent::where('id', $event_id)
-    // ->select('event_name','id')->get();
-
-    // return response()->json([
-    //     'html' => view('pages.space_event_type.eventReportById',compact('eventname'))->render(),
-    // ]);
-    // }
 
     public function index()
     {
@@ -265,18 +222,6 @@ class AnnualEventController extends Controller
         return view('admin.dashboard', compact('upcomingEvents'));
     }
 
-    //View upcoming event dummy data
-    public function upcomingEventsView()
-    {
-        return view('admin.dummydata');
-    }
-
-    // public function create()
-    // {
-    //     $space_event_types = EventType::orderBy('id', 'ASC')->paginate();
-    //     $employees = Employee::orderBy('emp_id', 'ASC')->paginate();
-    //     return view('pages.space_event.space_event_create', ['space_event_types' => $space_event_types, 'employees' => $employees]);
-    // }
 
     public function store(Request $request)
     {
@@ -332,54 +277,12 @@ class AnnualEventController extends Controller
     public function show($event_id)
     {
         $event = NewEvent::where('id', $event_id)->first();
-        // You can also retrieve other related data if needed
 
         return response()->json($event);
     }
 
-    public function insertEventData(Request $request)
-    {
-    }
+// These are previously developed functions - have to check them
 
-    public function Report(Request $request)
-    {
-        // Fetch the event details based on the event_id
-        $createdEvent = NewEvent::where('id', $request->event_id)->first();
-
-        // Fetch the coordinator details
-        $employee = Employee::where('emp_id', $request->coordinator)->get();
-
-        // Fetch the tasks associated with the event type of the created event
-        $tasks = Task::where('event_type_id', $createdEvent->event_id)->get();
-
-        // Fetch the event type details
-        $eventType = EventType::where('id', $createdEvent->event_id)->get();
-
-        // Pass the fetched data to the view
-        return view('pages.space_event_type.eventReport', [
-            'createdEvent' => $createdEvent,
-            'employee' => $employee,
-            'tasks' => $tasks,
-            'eventType' => $eventType,
-        ]);
-    }
-
-    // // Use the passed parameters to retrieve the data
-    // $createdEvent = NewEvent::select('event_name', 'start_date', 'end_date', 'coordinator')
-    //     ->where('event_id', $event_id)
-    //     ->get();
-
-    // $employee = Employee::where('emp_id', $coordinator)->get();
-    // $tasks = Task::where('event_type_id', $event_id)->get();
-    // $eventType = EventType::select('event_type')->get();
-
-    // // Pass the retrieved data to the view
-    // return view('pages.space_event_type.eventReport', [
-    //     'createdEvent' => $createdEvent,
-    //     'employee' => $employee,
-    //     'tasks' => $tasks,
-    //     'eventType' => $eventType,
-    // ]);
 
     public static function edit($space_event_id)
     {

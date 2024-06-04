@@ -18,12 +18,12 @@ class NewEvent extends Model
         'start_date',
         'end_date',
         'coordinator',
-        'event_id', 
+        'event_id',
     ];
 
 
 // Assuming the relationship between NewEvent and Task is a many-to-many relationship
-// You may need to adjust the relationship based on your database structure
+
 public function tasks()
 {
     return $this->belongsToMany(Task::class);
